@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kioskMapper">
+	
+	<select id="admingoodsList" resultType="kiosk">
+		select * from goods
+	</select>
+	
+	<select id="getgoods" resultType="kiosk">
+		select * from goods where goods_id = #{goods_id}
+	</select>
+	
+	<select id="mainselect" resultType="kiosk">
+		SELECT * FROM goods WHERE goods_category = #{goods_category}
+	</select>
+	
+	<insert id="insertgoods" parameterType="kiosk">
+		insert into goods(
+		goods_id, goods_name, goods_price, goods_detail, goods_count, goods_category, goods_image)
+		values(
+		goods_seq.nextval, #{goods_name}, #{goods_price}, #{goods_detail}, #{goods_count}, #{goods_category}, #{goods_image})
+	</insert>
+	
+	<delete id="deletegoods" parameterType="kiosk">
+		delete from goods
+		where goods_id = #{goods_id}
+	</delete>
+	
+	<update id="updategoods" parameterType="kiosk">
+		update goods
+		set
+		goods_name = #{goods_name},
+		goods_price = #{goods_price},
+		goods_detail = #{goods_detail},
+		goods_count = #{goods_count},
+		goods_category = #{goods_category},
+		goods_image = #{goods_image}
+		where goods_id = #{goods_id}
+	</update>
+	
+	<insert id="addcart" parameterType="kiosk">
+        INSERT INTO cart (cart_id, cart_name, cart_price, cart_count, goods_id)
+        VALUES (cart_id_seq.nextval, 
+                (SELECT goods_name FROM goods WHERE goods_id = #{goods_id}),
+                (SELECT goods_price FROM goods WHERE goods_id = #{goods_id}),
+                1,
+                #{goods_id})
+    </insert>
+	
+	<!--<insert id="addcart" parameterType="kiosk">
+	    INSERT INTO cart (cart_id, cart_name, cart_price, cart_count, goods_id)
+	    VALUES (cart_id_seq.nextval, #{goods_name}, #{goods_price}, 1, #{goods_id})
+	</insert>
+	
+	 <insert id="cartinsert" parameterType="kiosk">
+		insert into cart (goods_id, cart_name, cart_count, cart_peice)
+		values (#{goods_id}, #{cart_name}, #{cart_count}, #{cart_peice})
+	</insert> -->
+	
+</mapper>
